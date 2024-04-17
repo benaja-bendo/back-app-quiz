@@ -96,7 +96,7 @@ Route::get('/test', function () {
         'messages' => [
             ['role' => 'user', 'content' => '
             Parle moi en français, s\'il te plaît.
-            générer 1 seul quiz sur les mathématiques de niveau facile, s\'il vous plaît.
+            générer 1 seul quiz sur le javascript de niveau facile, s\'il vous plaît.
             structure ta réponse de la maniere qui suit:
             Q. la question,
             (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
