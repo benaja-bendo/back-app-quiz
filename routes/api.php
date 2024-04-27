@@ -78,25 +78,26 @@ Route::post('v1/auth/register', function (Request $request) {
     return response()->json($response, 201);
 });
 
+Route::post('/generate-quiz', function (Request $request) {
+    $skill = $request->input('skill');
+    $level = $request->input('level');
+
+    // Ajoutez votre logique pour générer le quiz en fonction du skill et du niveau
+    // Par exemple, vous pouvez appeler votre intégration API OpenAI ici
+
+    // Pour l'exemple, je vais simplement retourner les données reçues
+    return response()->json(['skill' => $skill, 'level' => $level, 'message' => 'Quiz généré avec succès'], 200);
+});
+
 Route::get('/test', function () {
     $yourApiKey = env('OPENAI_API_KEY');
     $client = OpenAI::client($yourApiKey);
     $result = $client->chat()->create([
         'model' => 'gpt-3.5-turbo',
-//        'messages' => [
-//            ['role' => 'user', 'content' => '
-//            Parle moi en français, s\'il te plaît.
-//            générer un quiz sur les mathématiques de niveau facile, s\'il vous plaît.
-//            structure ta réponse de la maniere qui suit:
-//            Q. la question,
-//            a. b. c. d. e. comme choix de réponse (plusieurs réponses peuvent être correctes),
-//            R. les réponses correctes.(séparées par des virgules)
-//            '
-//            ],
         'messages' => [
             ['role' => 'user', 'content' => '
             Parle moi en français, s\'il te plaît.
-            générer 1 seul quiz sur le javascript de niveau facile, s\'il vous plaît.
+            générer 1 seul quiz sur le $skill de niveau: $niveau, s\'il vous plaît.
             structure ta réponse de la maniere qui suit:
             Q. la question,
             (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
