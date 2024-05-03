@@ -10,7 +10,7 @@ use OpenApi\Attributes as OA;
 class QuizController extends Controller
 {
     #[OA\Get(
-        path: '/api/quizzes',
+        path: '/api/v1/quiz',
         operationId: 'indexQuiz',
         description: 'Get all quizzes from the database',
         summary: 'List all quizzes',
