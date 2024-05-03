@@ -106,3 +106,52 @@ Route::get('/test', function () {
     $data =$result->choices[0]->message->content;
     return response()->json(['message' => $data], 200);
 });
+
+Route::get('v1/quiz', function (Request $request) {
+    $quizList = [
+        [
+            'id' => 1,
+            'title' => 'Films des années 80',
+            'minutes' => '20',
+            'level' => 'Difficile',
+            'answer' => 'blanc',
+        ],
+        [
+            'id' => 2,
+            'title' => 'Capitales mondiales',
+            'min' => '5',
+            'level' => 'Facile',
+            'answer' => 'Paris',
+        ],
+        [
+            'id' => 3,
+            'title' => 'Personnages de dessins animés',
+            'min' => '7',
+            'level' => 'Facile',
+            'answer' => '4',
+        ],
+        [
+            'id' => 4,
+            'title' => 'Énigmes mathématiques',
+            'min' => '20',
+            'level' => 'Difficile',
+            'answer' => 'blanc',
+        ],
+        [
+            'id' => 5,
+            'title' => 'Voiture de sport',
+            'min' => '10',
+            'level' => 'Moyen',
+            'answer' => 'Paris',
+        ],
+        [
+            'id' => 6,
+            'title' => 'Cuisine internationale',
+            'min' => '18',
+            'level' => 'Difficile',
+            'answer' => '4',
+        ],
+    ];
+
+    return response()->json($quizList, 200);
+});
