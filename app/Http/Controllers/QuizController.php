@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\QuizCollection;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use OpenApi\Attributes as OA;
 
@@ -22,9 +24,14 @@ class QuizController extends Controller
         ],
 
     )]
-    public function index(): void
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        //
+        $quizList = Quiz::all();
+
+        return $this->successResponse(
+            data: new QuizCollection($quizList),
+            message: 'Quizzes retrieved successfully.',
+        );
     }
 
     /**

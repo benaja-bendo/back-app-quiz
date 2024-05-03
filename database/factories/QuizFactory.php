@@ -17,9 +17,9 @@ class QuizFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->title(),
-            'minutes' => '1',
-            'level' => 'Difficile',
+            'title' => fake()->sentence(10),
+            'minutes' => fake()->numberBetween(1, 20),
+            'level' => fake()->randomElement(['easy', 'medium', 'hard']),
         ];
     }
 }

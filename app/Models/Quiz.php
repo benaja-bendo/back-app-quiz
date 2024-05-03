@@ -14,4 +14,9 @@ class Quiz extends Model
         'minutes',
         'level',
     ];
+
+    public function questions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
 }

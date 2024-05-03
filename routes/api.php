@@ -5,12 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Documentation API
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
 |
 */
 
@@ -21,8 +17,16 @@ Route::get('/documentation/json', function (Request $request) {
         ->header('Content-Type', 'application/json');
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+/*
+|--------------------------------------------------------------------------
+| Version 1 API
+|--------------------------------------------------------------------------
+|
+*/
+Route::group(['prefix' => 'v1'], function () {
+    Route::get('quiz',[App\Http\Controllers\QuizController::class, 'index']);
+
+
 });
 
 Route::post('v1/auth/login', function (Request $request) {
@@ -114,51 +118,51 @@ Route::get('/test', function () {
     return response()->json(['message' => $data], 200);
 });
 
-Route::get('v1/quiz', function (Request $request) {
-    $quizList = [
-        [
-            'id' => 1,
-            'title' => 'Films des années 80',
-            'minutes' => '20',
-            'level' => 'Difficile',
-            'answer' => 'blanc',
-        ],
-        [
-            'id' => 2,
-            'title' => 'Capitales mondiales',
-            'min' => '5',
-            'level' => 'Facile',
-            'answer' => 'Paris',
-        ],
-        [
-            'id' => 3,
-            'title' => 'Personnages de dessins animés',
-            'min' => '7',
-            'level' => 'Facile',
-            'answer' => '4',
-        ],
-        [
-            'id' => 4,
-            'title' => 'Énigmes mathématiques',
-            'min' => '20',
-            'level' => 'Difficile',
-            'answer' => 'blanc',
-        ],
-        [
-            'id' => 5,
-            'title' => 'Voiture de sport',
-            'min' => '10',
-            'level' => 'Moyen',
-            'answer' => 'Paris',
-        ],
-        [
-            'id' => 6,
-            'title' => 'Cuisine internationale',
-            'min' => '18',
-            'level' => 'Difficile',
-            'answer' => '4',
-        ],
-    ];
-
-    return response()->json($quizList, 200);
-});
+//Route::get('v1/quiz', function (Request $request) {
+//    $quizList = [
+//        [
+//            'id' => 1,
+//            'title' => 'Films des années 80',
+//            'minutes' => '20',
+//            'level' => 'Difficile',
+//            'answer' => 'blanc',
+//        ],
+//        [
+//            'id' => 2,
+//            'title' => 'Capitales mondiales',
+//            'min' => '5',
+//            'level' => 'Facile',
+//            'answer' => 'Paris',
+//        ],
+//        [
+//            'id' => 3,
+//            'title' => 'Personnages de dessins animés',
+//            'min' => '7',
+//            'level' => 'Facile',
+//            'answer' => '4',
+//        ],
+//        [
+//            'id' => 4,
+//            'title' => 'Énigmes mathématiques',
+//            'min' => '20',
+//            'level' => 'Difficile',
+//            'answer' => 'blanc',
+//        ],
+//        [
+//            'id' => 5,
+//            'title' => 'Voiture de sport',
+//            'min' => '10',
+//            'level' => 'Moyen',
+//            'answer' => 'Paris',
+//        ],
+//        [
+//            'id' => 6,
+//            'title' => 'Cuisine internationale',
+//            'min' => '18',
+//            'level' => 'Difficile',
+//            'answer' => '4',
+//        ],
+//    ];
+//
+//    return response()->json($quizList, 200);
+//});
