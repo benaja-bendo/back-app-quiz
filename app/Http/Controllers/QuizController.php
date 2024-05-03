@@ -7,9 +7,6 @@ use OpenApi\Attributes as OA;
 
 class QuizController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     #[OA\Get(
         path: '/api/quizzes',
         operationId: 'indexQuiz',
@@ -17,7 +14,7 @@ class QuizController extends Controller
         summary: 'List all quizzes',
         tags: ['Quiz'],
         responses: [
-            new OA\Response(response: 200, description: 'AOK'),
+            new OA\Response(response: 200, description: 'OK'),
             new OA\Response(response: 401, description: 'Not allowed'),
         ],
 
@@ -27,9 +24,6 @@ class QuizController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     #[OA\Post(
         path: '/api/quiz',
         operationId: 'storeQuiz',
@@ -46,25 +40,77 @@ class QuizController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     */
+    #[OA\Get(
+        path: '/api/quiz/{id}',
+        operationId: 'showQuiz',
+        description: 'Get a quiz from the database',
+        summary: 'Get a quiz',
+        tags: ['Quiz'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'The ID of the quiz',
+                in: 'path',
+                required: true,
+                allowEmptyValue: false,
+                schema: new OA\Schema(type: 'string'),
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 201, description: 'Created'),
+            new OA\Response(response: 401, description: 'Not allowed'),
+        ],
+    )]
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    #[OA\Put(
+        path: '/api/quiz/{id}',
+        operationId: 'updateQuiz',
+        description: 'Update a quiz in the database',
+        summary: 'Update a quiz',
+        tags: ['Quiz'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'The ID of the quiz',
+                in: 'path',
+                required: true,
+                allowEmptyValue: false,
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'OK'),
+            new OA\Response(response: 401, description: 'Not allowed'),
+        ],
+    )]
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    #[OA\Delete(
+        path: '/api/quiz/{id}',
+        operationId: 'destroyQuiz',
+        description: 'Destroy a quiz in the database',
+        summary: 'Destroy a quiz',
+        tags: ['Quiz'],
+        parameters: [
+            new OA\Parameter(
+                name: 'id',
+                description: 'The ID of the quiz',
+                in: 'path',
+                required: true,
+                allowEmptyValue: false,
+            ),
+        ],
+        responses: [
+            new OA\Response(response: 200, description: 'OK'),
+            new OA\Response(response: 401, description: 'Not allowed'),
+        ],
+    )]
     public function destroy(string $id)
     {
         //
