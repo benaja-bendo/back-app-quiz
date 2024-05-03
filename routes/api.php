@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/documentation/json', function (Request $request) {
+    $openapi = \OpenApi\Generator::scan(['../app']);
+    return response()
+        ->json($openapi)
+        ->header('Content-Type', 'application/json');
+});
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -92,9 +99,9 @@ Route::get('/test', function () {
     $result = $client->chat()->create([
         'model' => 'gpt-3.5-turbo',
         'messages' => [
-            ['role' => 'user', 'content' => ' 
-            je veux que tu me generes  en francais 
-            un  seul quiz sur le  $skill de niveau  $niveau , 
+            ['role' => 'user', 'content' => '
+            je veux que tu me generes  en francais
+            un  seul quiz sur le  $skill de niveau  $niveau ,
             en structurant ta réponse de la maniere qui suit:
             Q. la question,
             (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
@@ -103,7 +110,7 @@ Route::get('/test', function () {
             ],
         ],
     ]);
-    $data =$result->choices[0]->message->content;
+    $data = $result->choices[0]->message->content;
     return response()->json(['message' => $data], 200);
 });
 
