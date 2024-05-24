@@ -14,7 +14,7 @@
 <script>
     window.onload = () => {
         window.ui = SwaggerUIBundle({
-            url: "http://127.0.0.1:8000/api/documentation/json",
+            url: "{{ route('documentation.json') }}",
             dom_id: '#swagger-ui',
             presets: [
                 SwaggerUIBundle.presets.apis,

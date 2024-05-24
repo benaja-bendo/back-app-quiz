@@ -15,7 +15,7 @@ Route::get('/documentation/json', function (Request $request) {
     return response()
         ->json($openapi)
         ->header('Content-Type', 'application/json');
-});
+})->name('documentation.json');
 
 /*
 |--------------------------------------------------------------------------
@@ -24,8 +24,11 @@ Route::get('/documentation/json', function (Request $request) {
 |
 */
 Route::group(['prefix' => 'v1'], function () {
-    Route::get('quiz',[App\Http\Controllers\QuizController::class, 'index']);
-
+    Route::get('quizzes',[App\Http\Controllers\QuizController::class, 'index']);
+    Route::get('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'show']);
+    Route::post('quizzes', [App\Http\Controllers\QuizController::class, 'store']);
+    Route::put('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'update']);
+    Route::delete('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'destroy']);
 
 });
 
