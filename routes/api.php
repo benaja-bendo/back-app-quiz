@@ -5,17 +5,31 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| API Routes
+| Documentation API
 |--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/documentation/json', function (Request $request) {
+    $openapi = \OpenApi\Generator::scan(['../app']);
+    return response()
+        ->json($openapi)
+        ->header('Content-Type', 'application/json');
+})->name('documentation.json');
+
+/*
+|--------------------------------------------------------------------------
+| Version 1 API
+|--------------------------------------------------------------------------
+|
+*/
+Route::group(['prefix' => 'v1'], function () {
+    Route::get('quizzes',[App\Http\Controllers\QuizController::class, 'index']);
+    Route::get('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'show']);
+    Route::post('quizzes', [App\Http\Controllers\QuizController::class, 'store']);
+    Route::put('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'update']);
+    Route::delete('quizzes/{id}', [App\Http\Controllers\QuizController::class, 'destroy']);
+
 });
 
 Route::post('v1/auth/login', function (Request $request) {
@@ -92,9 +106,9 @@ Route::get('/test', function () {
     $result = $client->chat()->create([
         'model' => 'gpt-3.5-turbo',
         'messages' => [
-            ['role' => 'user', 'content' => ' 
-            je veux que tu me generes  en francais 
-            un  seul quiz sur le  $skill de niveau  $niveau , 
+            ['role' => 'user', 'content' => '
+            je veux que tu me generes  en francais
+            un  seul quiz sur le  $skill de niveau  $niveau ,
             en structurant ta réponse de la maniere qui suit:
             Q. la question,
             (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
@@ -103,55 +117,55 @@ Route::get('/test', function () {
             ],
         ],
     ]);
-    $data =$result->choices[0]->message->content;
+    $data = $result->choices[0]->message->content;
     return response()->json(['message' => $data], 200);
 });
 
-Route::get('v1/quiz', function (Request $request) {
-    $quizList = [
-        [
-            'id' => 1,
-            'title' => 'Films des années 80',
-            'minutes' => '20',
-            'level' => 'Difficile',
-            'answer' => 'blanc',
-        ],
-        [
-            'id' => 2,
-            'title' => 'Capitales mondiales',
-            'min' => '5',
-            'level' => 'Facile',
-            'answer' => 'Paris',
-        ],
-        [
-            'id' => 3,
-            'title' => 'Personnages de dessins animés',
-            'min' => '7',
-            'level' => 'Facile',
-            'answer' => '4',
-        ],
-        [
-            'id' => 4,
-            'title' => 'Énigmes mathématiques',
-            'min' => '20',
-            'level' => 'Difficile',
-            'answer' => 'blanc',
-        ],
-        [
-            'id' => 5,
-            'title' => 'Voiture de sport',
-            'min' => '10',
-            'level' => 'Moyen',
-            'answer' => 'Paris',
-        ],
-        [
-            'id' => 6,
-            'title' => 'Cuisine internationale',
-            'min' => '18',
-            'level' => 'Difficile',
-            'answer' => '4',
-        ],
-    ];
-
-    return response()->json($quizList, 200);
-});
+//Route::get('v1/quiz', function (Request $request) {
+//    $quizList = [
+//        [
+//            'id' => 1,
+//            'title' => 'Films des années 80',
+//            'minutes' => '20',
+//            'level' => 'Difficile',
+//            'answer' => 'blanc',
+//        ],
+//        [
+//            'id' => 2,
+//            'title' => 'Capitales mondiales',
+//            'min' => '5',
+//            'level' => 'Facile',
+//            'answer' => 'Paris',
+//        ],
+//        [
+//            'id' => 3,
+//            'title' => 'Personnages de dessins animés',
+//            'min' => '7',
+//            'level' => 'Facile',
+//            'answer' => '4',
+//        ],
+//        [
+//            'id' => 4,
+//            'title' => 'Énigmes mathématiques',
+//            'min' => '20',
+//            'level' => 'Difficile',
+//            'answer' => 'blanc',
+//        ],
+//        [
+//            'id' => 5,
+//            'title' => 'Voiture de sport',
+//            'min' => '10',
+//            'level' => 'Moyen',
+//            'answer' => 'Paris',
+//        ],
+//        [
+//            'id' => 6,
+//            'title' => 'Cuisine internationale',
+//            'min' => '18',
+//            'level' => 'Difficile',
+//            'answer' => '4',
+//        ],
+//    ];
+//
+//    return response()->json($quizList, 200);
+//});
