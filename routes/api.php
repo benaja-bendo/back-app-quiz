@@ -15,7 +15,7 @@ Route::get('/documentation/json', function (Request $request) {
     return response()
         ->json($openapi)
         ->header('Content-Type', 'application/json');
-});
+})->name('documentation.json');
 
 /*
 |--------------------------------------------------------------------------
