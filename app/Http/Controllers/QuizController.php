@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\QuizCollection;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
+use OpenAI;
 use OpenApi\Attributes as OA;
 
 class QuizController extends Controller
@@ -32,7 +33,7 @@ class QuizController extends Controller
     }
 
     #[OA\Post(
-        path: '/api/quiz',
+        path: 'api/v1/quizzes',
         operationId: 'storeQuiz',
         description: 'Store a new quiz in the database',
         summary: 'Create a new quiz',
@@ -48,7 +49,7 @@ class QuizController extends Controller
     }
 
     #[OA\Get(
-        path: '/api/quiz/{id}',
+        path: '/v1/api/quizzes/{id}',
         operationId: 'showQuiz',
         description: 'Get a quiz from the database',
         summary: 'Get a quiz',
@@ -74,7 +75,7 @@ class QuizController extends Controller
     }
 
     #[OA\Put(
-        path: '/api/quiz/{id}',
+        path: '/api/v1/quizzes/{id}',
         operationId: 'updateQuiz',
         description: 'Update a quiz in the database',
         summary: 'Update a quiz',
@@ -99,7 +100,7 @@ class QuizController extends Controller
     }
 
     #[OA\Delete(
-        path: '/api/quiz/{id}',
+        path: '/api/v1/quizzes/{id}',
         operationId: 'destroyQuiz',
         description: 'Destroy a quiz in the database',
         summary: 'Destroy a quiz',
@@ -121,5 +122,38 @@ class QuizController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    #[OA\Get(
+        path: '/api/v1/generate-quiz',
+        operationId: 'generateQuiz',
+        description: 'Generate a quiz using OpenAI',
+        summary: 'Generate a quiz',
+        tags: ['Quiz'],
+        responses: [
+            new OA\Response(response: 200, description: 'OK'),
+            new OA\Response(response: 401, description: 'Not allowed'),
+        ],
+    )]
+    public function generateQuiz(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $yourApiKey = env('OPENAI_API_KEY');
+        $client = OpenAI::client($yourApiKey);
+        $result = $client->chat()->create([
+            'model' => 'gpt-3.5-turbo',
+            'messages' => [
+                ['role' => 'user', 'content' => '
+            je veux que tu me generes  en francais
+            un  seul quiz sur le  $skill de niveau  $niveau ,
+            en structurant ta réponse de la maniere qui suit:
+            Q. la question,
+            (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
+            R. la réponse correcte.
+            '
+                ],
+            ],
+        ]);
+        $data = $result->choices[0]->message->content;
+        return response()->json(['message' => $data], 200);
     }
 }
