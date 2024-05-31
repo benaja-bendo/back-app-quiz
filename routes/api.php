@@ -33,4 +33,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('auth/login', [App\Http\Controllers\AuthController::class, 'login']);
     Route::post('auth/logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::post('auth/register', [App\Http\Controllers\AuthController::class, 'register']);
+    Route::get('user/{id}/profile', [App\Http\Controllers\UserController::class, 'getProfile']);
+    Route::get('users', [App\Http\Controllers\UserController::class, 'allUsers']);
+
 });
