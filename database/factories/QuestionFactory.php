@@ -17,7 +17,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'question' => fake()->sentence(),
+            'question' => fake()->title(),
             'hint' => fake()->sentence(),
             'quiz_id' => fake()->numberBetween(1, 50),
             'type' => fake()->randomElement(['multiple_choice', 'true_false']),
