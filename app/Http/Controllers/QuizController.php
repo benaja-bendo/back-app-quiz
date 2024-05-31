@@ -220,23 +220,37 @@ class QuizController extends Controller
     )]
     public function generateQuiz(Request $request): \Illuminate\Http\JsonResponse
     {
-        $yourApiKey = env('OPENAI_API_KEY');
-        $client = OpenAI::client($yourApiKey);
-        $result = $client->chat()->create([
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => '
-            je veux que tu me generes  en francais
-            un  seul quiz sur le  $skill de niveau  $niveau ,
-            en structurant ta réponse de la maniere qui suit:
-            Q. la question,
-            (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
-            R. la réponse correcte.
-            '
+        try {
+            $yourApiKey = env('OPENAI_API_KEY');
+            Log::info('Using OpenAI API key: ' . $yourApiKey); // Log API key (remove in production)
+
+            $client = OpenAI::client($yourApiKey);
+            $skill = $request->query('skill');
+            $level = $request->query('level');
+
+            Log::info('Generating quiz for skill: ' . $skill . ', level: ' . $level);
+
+            $result = $client->chat()->create([
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'user', 'content' => "
+                        je veux que tu me génères en français
+                        un seul quiz sur le $skill de niveau $level,
+                        en structurant ta réponse de la manière qui suit:
+                        Q. la question,
+                        (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
+                        R. la réponse correcte.
+                    "],
                 ],
-            ],
-        ]);
-        $data = $result->choices[0]->message->content;
-        return response()->json(['message' => $data], 200);
+            ]);
+
+            $data = $result->choices[0]->message->content;
+            Log::info('Quiz generated successfully: ' . $data);
+
+            return response()->json(['message' => $data], 200);
+        } catch (\Exception $e) {
+            Log::error('Error generating quiz: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to generate quiz'], 500);
+        }
     }
 }
