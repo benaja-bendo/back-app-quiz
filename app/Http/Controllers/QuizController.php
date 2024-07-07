@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuizCollection;
+use App\Http\Resources\QuizResource;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use OpenAI;
@@ -163,7 +164,7 @@ class QuizController extends Controller
         }
 
         return $this->successResponse(
-            data: $quiz,
+            data: new QuizResource($quiz),
             message: 'Quiz retrieved successfully.',
         );
     }
@@ -220,23 +221,29 @@ class QuizController extends Controller
     )]
     public function generateQuiz(Request $request): \Illuminate\Http\JsonResponse
     {
+        $skill = $request->input('skill');
+        $level = $request->input('niveau');
+
         $yourApiKey = env('OPENAI_API_KEY');
         $client = OpenAI::client($yourApiKey);
         $result = $client->chat()->create([
             'model' => 'gpt-3.5-turbo',
             'messages' => [
-                ['role' => 'user', 'content' => '
+                ['role' => 'user', 'content' => "
             je veux que tu me generes  en francais
-            un  seul quiz sur le  $skill de niveau  $niveau ,
+            un  seul quiz sur le  $skill de niveau  $level ,
             en structurant ta réponse de la maniere qui suit:
             Q. la question,
             (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
             R. la réponse correcte.
-            '
+            "
                 ],
             ],
         ]);
         $data = $result->choices[0]->message->content;
-        return response()->json(['message' => $data], 200);
+        return response()->json([
+            'data' => $data,
+            'message' => 'Quiz genred successfully.',
+        ], 201);
     }
 }
