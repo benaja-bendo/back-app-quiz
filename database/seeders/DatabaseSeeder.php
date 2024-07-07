@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         \App\Models\Quiz::factory(50)->create();
         \App\Models\Question::factory(200)->create();
         \App\Models\Answer::factory(300)->create();
+        \App\Models\User::factory(300)->create();
     }
 }

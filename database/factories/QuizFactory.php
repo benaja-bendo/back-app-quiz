@@ -16,10 +16,32 @@ class QuizFactory extends Factory
      */
     public function definition(): array
     {
+        $quizzes = [
+            "Culture Générale",
+            "Mathématiques",
+            "Sciences",
+            "Géographie",
+            "Histoire",
+            "Littérature",
+            "Musique",
+            "Cinéma",
+            "Sport",
+            "Technologie",
+            "Langues",
+            "Cuisine",
+            "Mode",
+            "Jeux Vidéo",
+            "Télévision",
+            "Mythologie",
+            "Nature",
+            "Quiz d'Art",
+            "Psychologie",
+            "Politique"
+        ];
         return [
-            'title' => fake()->sentence(10),
+            'title' => fake()->randomElement($quizzes),
             'minutes' => fake()->numberBetween(1, 20),
-            'level' => fake()->randomElement(['easy', 'medium', 'hard']),
+            'level' => fake()->randomElement(['Facile', 'Moyen', 'Difficile']),
         ];
     }
 }
