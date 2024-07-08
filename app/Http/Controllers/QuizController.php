@@ -230,17 +230,81 @@ class QuizController extends Controller
             'model' => 'gpt-3.5-turbo',
             'messages' => [
                 ['role' => 'user', 'content' => "
-            je veux que tu me generes  en francais
-            un  seul quiz sur le  $skill de niveau  $level ,
-            en structurant ta réponse de la maniere qui suit:
-            Q. la question,
-            (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
-            R. la réponse correcte.
+             generes  en francais
+            un  quiz sur le  l'informatique de niveau  dificile sur des notion de javascript,
+            Que ta réponse respecte la structure du json qui suit avec comme valeur pour chaque clé les informations correspondantes
+             et en remplaçant les guillemets simples par des guillemets doubles :
+            {
+                'id': 1,
+                'title': string,
+                'minutes': 10,
+                'level': 'difficile',
+                'description': string,
+                'questions': [
+                    {
+                        'id': 1,
+                        'question': string,
+                        'type': 'multiple_choice',
+                        'hint': string,
+                        'answers': [
+                            {
+                                'id': 1,
+                                'answer': string,
+                                'is_correct': false
+                            },
+                            {
+                                'id': 2,
+                                'answer': string,
+                                'is_correct': false
+                            },
+                            {
+                                'id': 3,
+                                'answer': string,
+                                'is_correct': true
+                            },
+                            {
+                                'id': 4,
+                                'answer': string,
+                                'is_correct': false
+                            }
+                        ]
+                    },
+                    {
+                        'id': 2,
+                        'question': string,
+                        'type': 'multiple_choice',
+                        'hint': string,
+                        'answers': [
+                            {
+                                'id': 1,
+                                'answer': string,
+                                'is_correct': false
+                            },
+                            {
+                                'id': 2,
+                                'answer': string,
+                                'is_correct': true
+                            },
+                            {
+                                'id': 3,
+                                'answer':string,
+                                'is_correct': false
+                            },
+                            {
+                                'id': 4,
+                                'answer': string,
+                                'is_correct': false
+                            }
+                        ]
+                    }
+                ]
+            }
             "
                 ],
             ],
         ]);
         $data = $result->choices[0]->message->content;
+//        dd($data);
         return response()->json([
             'data' => $data,
             'message' => 'Quiz genred successfully.',
