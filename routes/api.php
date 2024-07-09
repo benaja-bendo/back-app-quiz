@@ -50,18 +50,27 @@ Route::group(['prefix' => 'v1'], function () {
 //    $f = Vedmant\FeedReader\Facades\FeedReader::read('https://www.linforme.com/rss/all_headline.xml'); // ok
 //    $f = Vedmant\FeedReader\Facades\FeedReader::read('https://news.google.com/news/rss');
 //    $f = Vedmant\FeedReader\Facades\FeedReader::read('https://www.frandroid.com/tag/flux-rss'); // ok
-    $f = Vedmant\FeedReader\Facades\FeedReader::read('https://www.tech2tech.fr/tag/flux-rss/'); // ok
+//    $f = Vedmant\FeedReader\Facades\FeedReader::read('https://www.tech2tech.fr/tag/flux-rss/'); // ok
 //        $f = Vedmant\FeedReader\Facades\FeedReader::read('https://www.01net.com/info/flux-rss/'); // ok
-        $items = $f->get_items();
+
+         $array_unic_format = [
+            "https://www.01net.com/info/flux-rss/",
+            "https://www.01net.com/flux-rss/actualites/jeux-video/",
+            "https://www.tech2tech.fr/tag/flux-rss/",
+        ];
         $data = [];
-        foreach ($items as $item) {
-            $data[] = [
-                'url' => $item->get_permalink(), // 'https://www.01net.com/actualites/le-jeu-video-est-il-un-sport-comme-les-autres-2090137.html'
-                'title' => $item->get_title(),
-                'content' => $item->get_content(),
-                'link' => $item->get_link(),
-                'date' => $item->get_date('j F Y | g:i a'),
-            ];
+        foreach ($array_unic_format as $url) {
+            $f = Vedmant\FeedReader\Facades\FeedReader::read($url);
+            $items = $f->get_items();
+            foreach ($items as $item) {
+                $data[] = [
+                    'url' => $item->get_permalink(), // 'https://www.01net.com/actualites/le-jeu-video-est-il-un-sport-comme-les-autres-2090137.html'
+                    'title' => $item->get_title(),
+                    'content' => $item->get_content(),
+                    'link' => $item->get_link(),
+                    'date' => $item->get_date('j F Y | g:i a'),
+                ];
+            }
         }
 
         return response()->json([
