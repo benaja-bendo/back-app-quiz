@@ -168,6 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Vedmant\FeedReader\FeedReaderServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -182,7 +183,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'OpenAI' => OpenAI\Laravel\Facades\OpenAI::class,
         // 'Example' => App\Facades\Example::class,
+        'FeedReader' => Vedmant\FeedReader\Facades\FeedReader::class,
     ])->toArray(),
 
 ];
