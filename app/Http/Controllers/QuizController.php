@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\QuizCollection;
+use App\Http\Resources\QuizResource;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 use OpenAI;
@@ -163,7 +164,7 @@ class QuizController extends Controller
         }
 
         return $this->successResponse(
-            data: $quiz,
+            data: new QuizResource($quiz),
             message: 'Quiz retrieved successfully.',
         );
     }
