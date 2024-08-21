@@ -183,6 +183,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'OpenAI' => OpenAI\Laravel\Facades\OpenAI::class,
         // 'Example' => App\Facades\Example::class,
         'FeedReader' => Vedmant\FeedReader\Facades\FeedReader::class,
     ])->toArray(),
