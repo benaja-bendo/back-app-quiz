@@ -221,93 +221,37 @@ class QuizController extends Controller
     )]
     public function generateQuiz(Request $request): \Illuminate\Http\JsonResponse
     {
-        $skill = $request->input('skill');
-        $level = $request->input('niveau');
+        try {
+            $yourApiKey = env('OPENAI_API_KEY');
+            Log::info('Using OpenAI API key: ' . $yourApiKey); // Log API key (remove in production)
 
-        $yourApiKey = env('OPENAI_API_KEY');
-        $client = OpenAI::client($yourApiKey);
-        $result = $client->chat()->create([
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => "
-             generes  en francais
-            un  quiz sur le  l'informatique de niveau  dificile sur des notion de javascript,
-            Que ta réponse respecte la structure du json qui suit avec comme valeur pour chaque clé les informations correspondantes
-             et en remplaçant les guillemets simples par des guillemets doubles :
-            {
-                'id': 1,
-                'title': string,
-                'minutes': 10,
-                'level': 'difficile',
-                'description': string,
-                'questions': [
-                    {
-                        'id': 1,
-                        'question': string,
-                        'type': 'multiple_choice',
-                        'hint': string,
-                        'answers': [
-                            {
-                                'id': 1,
-                                'answer': string,
-                                'is_correct': false
-                            },
-                            {
-                                'id': 2,
-                                'answer': string,
-                                'is_correct': false
-                            },
-                            {
-                                'id': 3,
-                                'answer': string,
-                                'is_correct': true
-                            },
-                            {
-                                'id': 4,
-                                'answer': string,
-                                'is_correct': false
-                            }
-                        ]
-                    },
-                    {
-                        'id': 2,
-                        'question': string,
-                        'type': 'multiple_choice',
-                        'hint': string,
-                        'answers': [
-                            {
-                                'id': 1,
-                                'answer': string,
-                                'is_correct': false
-                            },
-                            {
-                                'id': 2,
-                                'answer': string,
-                                'is_correct': true
-                            },
-                            {
-                                'id': 3,
-                                'answer':string,
-                                'is_correct': false
-                            },
-                            {
-                                'id': 4,
-                                'answer': string,
-                                'is_correct': false
-                            }
-                        ]
-                    }
-                ]
-            }
-            "
+            $client = OpenAI::client($yourApiKey);
+            $skill = $request->query('skill');
+            $level = $request->query('level');
+
+            Log::info('Generating quiz for skill: ' . $skill . ', level: ' . $level);
+
+            $result = $client->chat()->create([
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'user', 'content' => "
+                        je veux que tu me génères en français
+                        un seul quiz sur le $skill de niveau $level,
+                        en structurant ta réponse de la manière qui suit:
+                        Q. la question,
+                        (a. b. c. d. e.) comme choix de réponse (une seule réponse devrait être correcte),
+                        R. la réponse correcte.
+                    "],
                 ],
-            ],
-        ]);
-        $data = $result->choices[0]->message->content;
-//        dd($data);
-        return response()->json([
-            'data' => $data,
-            'message' => 'Quiz genred successfully.',
-        ], 201);
+            ]);
+
+            $data = $result->choices[0]->message->content;
+            Log::info('Quiz generated successfully: ' . $data);
+
+            return response()->json(['message' => $data], 200);
+        } catch (\Exception $e) {
+            Log::error('Error generating quiz: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to generate quiz'], 500);
+        }
     }
 }
