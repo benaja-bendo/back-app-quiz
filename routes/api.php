@@ -81,8 +81,8 @@ Route::group(['prefix' => 'v1'], function () {
                 $percentage = fake()->numberBetween(0, 100);
                 try {
                     $percentage = getDateIA("Que ta réponse soit juste un nombre entre 0 et 100 qui représente la  fiabilité de l'article
-                si l'article traite du domaine de l'éducation, lancement d'une strategie nationnale avec de l'intélligence artificiel pour l'apprentissage
-                0 s'il est trop éloingné.
+                si l'article traite du domaine de l'éducation, lancement d'une stratégie nationale avec de l'intelligence artificielle pour l'apprentissage
+                0 s'il est trop éloigné.
                 voici l'article en question: ". $item->get_content()." ". $item->get_date('j F Y | g:i a'));
                 } catch (Exception $e) {
                     $percentage = 0;
